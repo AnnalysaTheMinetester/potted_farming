@@ -1,0 +1,11 @@
+# textdomain: potted_farming
+
+
+### items.lua ###
+### tools.lua ###
+
+Watering Can=Gießkanne
+
+### lib.lua ###
+
+Wild =Wilde(r)

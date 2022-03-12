@@ -1,0 +1,2 @@
+The i18n.py is a little tool to create or update the locale.
+To run this, you need python installed.
