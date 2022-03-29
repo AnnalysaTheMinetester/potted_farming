@@ -1,0 +1,39 @@
+# textdomain: potted_farming
+
+
+### items.lua ###
+
+Empty Watering Can=
+
+### lib.lua ###
+
+Pot with =
+
+Basil=
+Rosemary=
+Sage=
+ Stem=
+Wild =
+
+Brown=
+Cantharellus=
+Boletus=
+Brown Mushroom Spores=
+Cantharellus Mushroom Spores=
+Boletus Mushroom Spores=
+
+Lemon=
+Orange=
+Apple=
+ (Leaves)=
+
+### nodes.lua ###
+
+Pot with Soil=
+
+### tools.lua ###
+
+Watering Can=
+
+
+##### not used anymore #####

@@ -1,0 +1,39 @@
+# textdomain: potted_farming
+
+
+### items.lua ###
+
+Empty Watering Can=Leere Gießkanne
+
+### lib.lua ###
+
+Pot with =Vase mit
+
+Basil=Basilikum
+Rosemary=Rosmarin
+Sage=Salbei
+ Stem= mit Wurzel
+Wild =Wilde(r)
+
+Brown=Braun
+Cantharellus=Pfifferling
+Boletus=Steinpilz
+Brown Mushroom Spores=Braune Pilzsporen
+Cantharellus Mushroom Spores=Pfifferling Pilzsporen
+Boletus Mushroom Spores=Steinpilz Pilzsporen
+
+Lemon=Zitrone
+Orange=Orange
+Apple=Apfel
+ (Leaves)= (Blätter)
+
+### nodes.lua ###
+
+Pot with Soil=Vase mit Erde
+
+### tools.lua ###
+
+Watering Can=Gießkanne
+
+
+##### not used anymore #####

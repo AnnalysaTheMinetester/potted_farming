@@ -1,125 +1,68 @@
 potted_farming = {}
-potted_farming.version = 1.0
-potted_farming.path = minetest.get_modpath(minetest.get_current_modname())
-potted_farming.plant_list = {
--- name 			found on																	 scale	y min max
-	{"basil", {"default:dirt_with_grass", "default:dirt"}, 0.0003, 0, 250},
-} -- parsley, sage, rosemary, mint, cinnamon?
 
-local function is_accettable_source (itemname)
-	for i=1,#potted_farming.plant_list do
-			local name = itemname:split(":")[2]
-			if name == potted_farming.plant_list[i][1] .. "_stem" then
-				return true, potted_farming.plant_list[i][1]
-			end
-	end
-	return false, "no"
+local pf = potted_farming
+pf.version = 3.0
+pf.modname = minetest.get_current_modname()
+pf.path = minetest.get_modpath(pf.modname)
+pf.watering_can_max_uses = 5
+
+local S
+
+if(minetest.get_translator) then
+   S = minetest.get_translator(pf.modname)
+
+else
+    S = function ( s ) return s end
+
 end
---register pot
-minetest.register_node("potted_farming:pot_with_soil", {
-	description = "Pot with Soil",
-	tiles = {
-		"pot_with_soil_top.png",
-		"pot_with_soil_bottom.png",
-		"pot_with_soil_side.png",
-		"pot_with_soil_side.png",
-		"pot_with_soil_side.png",
-		"pot_with_soil_side.png"
-	},
-	drawtype = "nodebox",
-	paramtype = "light",
-	groups = {oddly_breakable_by_hand = 4, crumbly = 1, cracky = 1, attached_node = 1},
-	node_box = {
-		type = "fixed",
-		fixed = {
-			{-0.1875, -0.5, -0.1875, 0.1875, -0.1875, 0.1875}, -- base_center
-			{-0.25, -0.375, -0.125, -0.1875, -0.1875, 0.125}, -- base1
-			{-0.125, -0.375, 0.1875, 0.125, -0.1875, 0.25}, -- base2
-			{0.1875, -0.375, -0.125, 0.25, -0.1875, 0.125}, -- base3
-			{-0.125, -0.375, -0.25, 0.125, -0.1875, -0.1875}, -- base4
-		}
-	},
-	selection_box = {
-		type = "fixed",
-		fixed = {
-			{-0.25, -0.5, -0.25, 0.25, -0.1875, 0.25}, -- selection
-		}
-	},
-	collision_box = {
-		type = "fixed",
-		fixed = {
-			{-0.25, -0.5, -0.25, 0.25, -0.1875, 0.25}, -- selection
-		}
-	},
-	on_rightclick = function(pos, node, player, itemstack, pointed_thing)
-		if player:is_player() and itemstack:is_empty() == false then
-			local itemname = itemstack:get_name()
-			local accettable, plant = is_accettable_source(itemname)
-			if accettable then
-				minetest.set_node(pos, {name = "potted_farming:pot_with_".. plant .."_1"})
-				itemstack:take_item()
-			end
-		end
-	end,
-	on_rotate = function(pos, node)
-		return false
-	end,
-})
-minetest.register_craft({
-	output = "potted_farming:pot_with_soil",
-	recipe = {
-		{"", "", ""},
-		{"default:brick", "group:dirt", "default:brick"},
-		{"dye:orange", "default:brick", "dye:brown"},
-	}
-})
 
-minetest.register_craftitem("potted_farming:empty_watering_can", {
-	description = "Watering Can",
-	inventory_image = "potted_farming_empty_watering_can.png",
-	groups = {watering_can = 1},
-	liquids_pointable = true,
-	stack_max = 1,
-	on_use = function(itemstack, player, pointed_thing)
-		local pos = minetest.get_pointed_thing_position(pointed_thing, above)
-		if not pos then return itemstack end
-		--
-		if player:is_player() and pointed_thing.type == "node" and minetest.get_item_group(minetest.get_node(pos).name , "water") >= 1 then
-			itemstack:replace("potted_farming:watering_can") -- so that it isnt given on another inv slot and can be immediatelly used
-			local n = math.random(1, 2)
-			minetest.sound_play("water_splash-0".. n, {pos=pos, gain=0.8})
-		end
-		return itemstack
-	end,
-})
-minetest.register_craft({
-	output = "potted_farming:empty_watering_can",
-	recipe = {
-		{"default:tin_ingot", "", "dye:green"},
-		{"default:tin_ingot", "", "default:tin_ingot"},
-		{"dye:green", "default:tin_ingot", "dye:green"},
-	}
-})
-minetest.register_tool("potted_farming:watering_can", {
-	description = "Watering Can",
-	inventory_image = "potted_farming_watering_can.png",
-	groups = {watering_can = 1, not_in_creative_inventory = 1},
-	liquids_pointable = false,
-	stack_max = 1,
-	wear = 10,
-	range = 2.5,
-	tool_capabilities = {},
-	on_use = function(itemstack, player, pointed_thing)
-		--local n = math.random(1, 2)
-		minetest.sound_play("water_splash-01", {pos=pos, gain=0.8})
-		return itemstack
-	end,
-})
+pf.S = S
 
-dofile(potted_farming.path .. "/lib.lua")
---potted_farming.register_plant("basil")
-for i=1, #potted_farming.plant_list do
-	potted_farming.register_plant(potted_farming.plant_list[i][1])
-	potted_farming.register_wild_variant(potted_farming.plant_list[i][1], potted_farming.plant_list[i][2],
-		potted_farming.plant_list[i][3], potted_farming.plant_list[i][4], potted_farming.plant_list[i][5] )
+dofile(pf.path .. "/lib.lua")
+dofile(pf.path .. "/nodes.lua")
+dofile(pf.path .. "/items.lua")
+dofile(pf.path .. "/tools.lua")
+dofile(pf.path .. "/recipes.lua")
+
+pf.plant_list = {
+-- name,          definable, wild parameters: place_on (found on),                                                     scale, y min max; min max lightlevel to grow
+  ["basil"] =     {true,   {"default:dirt_with_grass", "default:dirt", "ethereal:praire_dirt", "ethereal:grove:dirt"},  0.0003, 0, 250, 11, 15},
+  ["rosemary"] =  {true,   {"default:dirt_with_coniferous_litter", "default:dirt_with_snow", "ethereal:gray_dirt"},     0.0005, 10, 300, 10, 15},
+  ["sage"] =      {false,  {"default:permafrost_with_moss", "default:dirt_with_grass", "ethereal:cold_dirt"},           0.0004, 0, 250, 12, 15},
+
+}
+
+for k, v in pairs(pf.plant_list) do
+  if v[1] then
+  	pf.register_plant(k)
+  	pf.register_wild_variant(k, v[2], v[3], v[4], v[5] )
+  end
 end
+
+pf.mushroom_list = {
+  --name      definable, full_mushroom_name, min max lightlevel to grow
+  ["brown"]        = {true, "flowers:mushroom_brown",       0, 11},
+  ["cantharellus"] = {true, "herbs:mushroom_cantharellus",  0, 11},
+  ["boletus"]      = {false, "herbs:mushroom_boletus",      0, 12},
+}
+
+for k, v in pairs(pf.mushroom_list) do
+  if v[1] and minetest.registered_items[v[2]] then
+  	pf.register_mushroom(k, v[2])
+  end
+end
+
+pf.fruit_tree_list = {
+  --name      definable,       sapling_name,            fruit_name,              leaves_name,           min max lightlevel to grow
+  ["lemon"]  = {true, "ethereal:lemon_tree_sapling",  "ethereal:lemon",   "ethereal_lemon_leaves.png",  12, 15},
+  ["orange"] = {true, "ethereal:orange_tree_sapling", "ethereal:orange",  "ethereal_orange_leaves.png", 12, 15},
+  ["apple"]  = {true, "default:sapling",              "default:apple",    "default_leaves.png",         12, 15},
+}
+
+for k, v in pairs(pf.fruit_tree_list) do
+  if v[1] and minetest.registered_items[v[2]] then
+  	pf.register_fruit_tree(k, v[2], v[3], v[4])
+  end
+end
+
+minetest.log("ACTION", "[MOD] " .. pf.modname .. " successfully loaded.")

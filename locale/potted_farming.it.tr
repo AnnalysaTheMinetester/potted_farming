@@ -1,0 +1,39 @@
+# textdomain: potted_farming
+
+
+### items.lua ###
+
+Empty Watering Can=Innaffiatoio Vuoto
+
+### lib.lua ###
+
+Pot with =Vaso con
+
+Basil=Basilico
+Rosemary=Rosmarino
+Sage=Salvia
+ Stem= con Radice
+Wild =Selvatico 
+
+Brown=Marrone
+Cantharellus=Gallinaccio
+Boletus=Boleto
+Brown Mushroom Spores=Spore di Fungo Marrone
+Cantharellus Mushroom Spores=Spore di Gallinaccio
+Boletus Mushroom Spores=Spore di Boleto
+
+Lemon=Limone
+Orange=Arancia
+Apple=Mela
+ (Leaves)= (Foglie)
+
+### nodes.lua ###
+
+Pot with Soil=Vaso con Terra
+
+### tools.lua ###
+
+Watering Can=Innaffiatoio
+
+
+##### not used anymore #####

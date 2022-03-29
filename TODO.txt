@@ -1,0 +1,9 @@
+V basilico non viene dato cliccando su basilico_3,
+ma se ho il basilico nell'inv allora da'
+non so cosa ho fatto ma funzione *shrug*
+
+aggiustare tutti i valori di crescita
+
+eliminare le spore, fungo piantabile direttamente con se stesso
+
+add bonemeal custom support
