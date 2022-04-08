@@ -60,7 +60,7 @@ end -- lightlevel check
 
 function lib.register_abm(nodename, next_step_nodename, delay, percentage)
     minetest.register_abm({
-        label = "growing_potted_plant_amb",
+        label = "growing_potted_plant_abm",
         nodenames = {nodename},
         --neighbors = {"default:air"}, --can be omitted
         interval = delay,
@@ -131,7 +131,7 @@ function lib.register_plant(plant_name)
 
     -- STEM DEFINITION --
     minetest.register_craftitem(lib.modname .. ":".. plant_name .."_stem", {
-        description = plant_desc .." Stem",
+        description = plant_desc ..S(" Stem"),
         inventory_image = lib.modname .. "_".. plant_name .."_stem.png",
         groups = {stem = 1, flammable = 2,},
         --the planting mechanism is in the pot on_rightclick
