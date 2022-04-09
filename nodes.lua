@@ -64,3 +64,103 @@ minetest.register_node(pf.modname .. ":pot_with_soil", {
 	end,
 
 }) -- minetest.register_node(pot
+
+
+minetest.register_node(pf.modname ..":pot_with_shrub", {
+	description = S("Pot with Shrub"),
+	groups = {flammable = 2, crumbly = 1, cracky = 1, attached_node = 1, not_in_creative_inventory = 1},
+	tiles = {
+			"pot_with_soil_top.png",
+			"pot_with_soil_bottom.png",
+			"pot_with_soil_side.png^" .. pf.modname .. "_shrub.png",
+			"pot_with_soil_side.png^" .. pf.modname .. "_shrub.png",
+			"pot_with_soil_side.png^" .. pf.modname .. "_shrub.png",
+			"pot_with_soil_side.png^" .. pf.modname .. "_shrub.png"
+
+	}, -- tiles
+	drawtype = "nodebox",
+	paramtype = "light",
+	walkable = true,
+	node_box = {
+			type = "fixed",
+			fixed = {
+					{-0.1875, -0.5, -0.1875, 0.1875, -0.1875, 0.1875},                         -- base_center
+					{-0.25, -0.375, -0.125, -0.1875, -0.1875, 0.125},                          -- base1
+					{-0.125, -0.375, 0.1875, 0.125, -0.1875, 0.25},                            -- base2
+					{0.1875, -0.375, -0.125, 0.25, -0.1875, 0.125},                            -- base3
+					{-0.125, -0.375, -0.25, 0.125, -0.1875, -0.1875},                          -- base4
+					{-0.5, -0.5, 0, 0.5, 0.5, 0},                                              -- plant1X
+					{0, -0.5, -0.5, 0, 0.5, 0.5},                                              -- plant2Z
+
+			} -- fixed
+
+	}, -- node_box
+	selection_box = {
+			type = "fixed",
+			fixed = {
+					{-0.25, -0.5, -0.25, 0.25, 0.5, 0.25},                                 -- selection
+
+			}
+
+	}, -- selection_box
+
+	collision_box = {
+			type = "fixed",
+			fixed = {
+					{-0.25, -0.5, -0.25, 0.25, 0.5, 0.25},                                 -- selection
+
+			}
+
+	}, -- collsion_box
+
+	drop = {
+		items = {
+			{items = {pf.modname .. ":pot_with_soil"} },
+			{items = {"default:stick"} },
+
+		}, -- items
+
+	}, -- drop
+
+	on_rightclick = function (pos, node, player, itemstack, pointed_thing)
+		if player:is_player() then
+			local itemname = itemstack:get_name()
+			if itemstack:is_empty() == false and itemname == pf.modname .. ":watering_can" then
+				local nodepos = pos
+				local possible_leaf_pos = vector.add(nodepos, vector.new(0, 1, 0))
+				local possible_leaf = minetest.get_node(possible_leaf_pos)
+
+				local fruit_name = nil
+				for k, v in pairs(pf.fruit_tree_list) do
+					if possible_leaf.name == pf.modname ..":".. k .."_leaves_3" then
+						fruit_name = k
+					end
+				end -- fruit_tree_list iteration
+
+				if fruit_name ~= nil then
+					local max_uses = pf.watering_can_max_uses
+					itemstack:add_wear(65535 / (max_uses))
+					local wear = itemstack:get_wear()
+					if wear >= 65535 then
+						itemstack:replace(pf.modname .. ":empty_watering_can")
+
+					end -- if wear
+					local n = math.random(3, 4)
+					minetest.sound_play("water-splash-0".. n, {pos=nodepos, gain=1.2})
+					minetest.set_node(possible_leaf_pos, {name = pf.modname .. ":".. fruit_name .."_leaves_1"})
+
+				end -- if node above is ANY thirsty leaves
+
+			end -- itemstack is watering_can
+
+		end -- player is a player
+		return itemstack
+
+	end, -- on_rightclick
+	-- no further action is required, the leaves should fall on their own, as they too are an attached_node
+
+	on_rotate = function(pos, node)
+		return false
+	end,
+
+}) -- minetest.register_node(pot_with_shrub

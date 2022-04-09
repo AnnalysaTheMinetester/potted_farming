@@ -30,6 +30,7 @@ Apple=
 ### nodes.lua ###
 
 Pot with Soil=
+Pot with Shrub=
 
 ### tools.lua ###
 

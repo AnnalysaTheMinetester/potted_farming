@@ -9,7 +9,7 @@ minetest.register_tool(pf.modname .. ":watering_can", {
 	liquids_pointable = false,
 	stack_max = 1,
 	wear = pf.watering_can_max_uses,
-	range = 2.5,
+	range = 3.5,
 	tool_capabilities = {},
 })
 

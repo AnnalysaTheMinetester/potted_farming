@@ -13,7 +13,7 @@ Basil=Basilico
 Rosemary=Rosmarino
 Sage=Salvia
  Stem= con Radice
-Wild =Selvatico 
+Wild =Selvatico
 
 Brown=Marrone
 Cantharellus=Gallinaccio
@@ -30,6 +30,7 @@ Apple=Mela
 ### nodes.lua ###
 
 Pot with Soil=Vaso con Terra
+Pot with Shrub=Vaso con Arbusto
 
 ### tools.lua ###
 

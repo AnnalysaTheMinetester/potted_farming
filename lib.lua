@@ -2,7 +2,7 @@ local lib = potted_farming
 local S = lib.S
 
 local pot_def = {
-	groups = {flammable = 2, crumbly = 1, cracky = 1, attached_node = 1, not_in_creative_inventory = 1},
+	groups = {flammable = 2, crumbly = 2, cracky = 3, attached_node = 1, not_in_creative_inventory = 1},
 	tiles = {
 			"pot_with_soil_top.png",
 			"pot_with_soil_bottom.png",
@@ -55,7 +55,7 @@ local pot_def = {
 --[[
         **************************************************
         **                                              **
-        **           is_acceptable_source               **
+        **            is_acceptable_source              **
         **                                              **
         **************************************************
         need modname:itemname
@@ -63,29 +63,26 @@ local pot_def = {
 
 function lib.is_acceptable_source (itemname)
 	local name = itemname:split(":")[2]
-	local plant = name:split("_")[1] -- from modname:plant_stem i need the "plant" part
- 																	 -- from modname:mushroom_spores i need the "mushroom" part
-																	 -- from ethereal:lemon_tree_sapling i need the fruit part "lemon"
+	local plant = name:split("_")[1]
 
 	if plant == nil then plant = ""	end
 
 	-- if plant is present in table AND the item in hand is the stem of that plant
-	if lib.plant_list[plant] and string.find(name , "_stem") then
-		-- it could come from another mod, but it needs to be either a stem or a spore, defined in the given tables
+	if lib.plant_list[plant] and string.find(name , "_stem") and lib.plant_list[plant][1] then
 		return true, "plant", plant
-	elseif lib.mushroom_list[plant] and string.find(name, "_spores") then
-		return true, "mushroom", plant
-	elseif lib.fruit_tree_list[plant] and itemname == lib.fruit_tree_list[plant][2] then
-		return true, "fruit_tree", plant --lib.fruit_tree_list[plant][3]
-		-- only works if the itemname respect the pattern above, it does with ethereal
+	end
+	for k,v in pairs(lib.mushroom_list) do
+		if v[2] == itemname and v[1] then
+			return true, "mushroom", k
+		end
 	end
 	for k,v in pairs(lib.fruit_tree_list) do
-		if v[2] == itemname then
+		if v[2] == itemname and v[1] then
 			return true, "fruit_tree", k
 		end
 	end
 
-	return false, "no"
+	return false, "no", nil
 
 end -- lib.is_acceptable_source
 
@@ -100,19 +97,27 @@ end -- lib.is_acceptable_source
 
 function lib.check_light(pos, min_light, max_light)
   local checkpos = pos
+	if minetest.get_node(checkpos).name == "ignore" then
+		return false
+	end
+
   local pot_light = minetest.get_node_light(checkpos)
+	minetest.chat_send_all("pot light".. pot_light)
 	--"if you need to get the light value ontop of target node you need to get the light value of position above the target."
 	--this is a potted plant, can stay inside a house, not on soil, therefore there is no need to check the light from the node above.
-	if min_light < 1 then min_light = 1	end
-	if max_light > 15 then max_light = 15	end
+	local min = min_light
+	local max = max_light
 
-	if min_light <= pot_light and pot_light <= max_light then
+	if min < 1 then min = 1	end
+	if max > 15 then max = 15	end
+
+	if min <= pot_light and pot_light <= max then
 		return true
 	end
 
   return false
 
-end -- lightlevel check
+end -- function lib.check_light
 
 
 --[[
@@ -135,7 +140,7 @@ function lib.register_plant_abm(nodename, next_step_nodename, delay, percentage)
 			n = 3
 		end
     minetest.register_abm({
-        label = "growing_potted_".. plant_name .."_amb",
+        label = "growing_potted_".. plant_name .."_abm",
         nodenames = {nodename},
         --neighbors = {"default:air"}, --can be omitted
         interval = delay,
@@ -152,6 +157,7 @@ function lib.register_plant_abm(nodename, next_step_nodename, delay, percentage)
   	}) -- register_plant_abm
 
 end -- lib.register_plant_abm
+
 
 --[[
         **************************************************
@@ -171,31 +177,9 @@ function add_watering_can_wear(itemstack)
 	end -- if wear
 
 	return itemstack
+
 end -- add_watering_can_wear
 
---[[
-        **************************************************
-        **                                              **
-        **                plant_stem                    **
-        **                                              **
-        **************************************************
---]]
-
-function lib.plant_stem(node_def, pointed_thing)
-    if(pointed_thing.type == "node") then
-        local node = minetest.get_node(minetest.get_pointed_thing_position(pointed_thing, under))
-
-        if (node.name == lib.modname .. ":pot_with_soil") then
-            minetest.set_node(pointed_thing.under, {name = node_def.nodename .. "_stem"})
-            return true
-
-        end -- if(node.name
-
-    end -- if(pointed_thing
-
-    return false -- pointed thing isn't a node
-
-end -- lib.plant_stem
 
 --[[
         **************************************************
@@ -292,42 +276,46 @@ function lib.register_plant(plant_name)
     plant_def.on_rightclick = function (pos, node, player, itemstack, pointed_thing)
         if player:is_player() then
             local itemname = itemstack:get_name()
-            if itemstack:is_empty() == true then
+            if itemname ~= lib.modname ..":watering_can" then
 
-                local q = math.random(2, 4)                                                -- number of leaves taken
-                local stem = math.random(1, 5)                                             -- chance of getting a stem
-								local leftover
+							local nodepos = pos
+              local q = math.random(2, 4)                                                -- number of leaves taken
+              local stem = math.random(1, 5)                                             -- chance of getting a stem
+							local leftover
 
-								local item = ItemStack(lib.modname .. ":".. plant_name .." ".. q)
+							local item = ItemStack(lib.modname .. ":".. plant_name .." ".. q)
 
-                local inv = player:get_inventory()
-                if inv:room_for_item("main", item) then
-                    leftover = inv:add_item("main", item)
-										if not leftover:is_empty() then
-											minetest.add_item(player:get_pos(), leftover)
-										end
-                else
+              local inv = player:get_inventory()
+              if inv:room_for_item("main", item) then
+                  leftover = inv:add_item("main", item)
+									if not leftover:is_empty() then
+										minetest.add_item(player:get_pos(), leftover)
+									end
+              else
 
-                    minetest.add_item(player:get_pos(), item)
+                  minetest.add_item(player:get_pos(), item)
 
-                end
-								local stem_item = lib.modname .. ":"..plant_name .."_stem"
+              end
+							local stem_item = lib.modname .. ":"..plant_name .."_stem"
 
-                if stem == 1 then
-                    if inv:room_for_item("main", stem_item) then
-                        inv:add_item("main", stem_item)
-                    else
+              if stem == 1 then
+                  if inv:room_for_item("main", stem_item) then
+                      leftover = inv:add_item("main", stem_item)
+											if not leftover:is_empty() then
+												minetest.add_item(player:get_pos(), leftover)
+											end
+                  else
 
-                        minetest.add_item(pos, stem_item)
+                      minetest.add_item(player:get_pos(), stem_item)
 
-                    end -- if inv.room
+                  end -- if inv.room
 
-                end -- if stem
+              end -- if stem
 
-                local n = math.random(1, 3)
-                minetest.sound_play("foliage-0".. n, {pos=pos, gain=1.2})
+              local n = math.random(1, 3)
+              minetest.sound_play("foliage-0".. n, {pos=nodepos, gain=1.2})
 
-                minetest.set_node(pos, {name = lib.modname .. ":pot_with_".. plant_name .."_2"})
+              minetest.set_node(nodepos, {name = lib.modname .. ":pot_with_".. plant_name .."_2"})
 
             end -- itemstack empty
 
@@ -361,7 +349,8 @@ function lib.register_plant(plant_name)
         if player:is_player() then
         local itemname = itemstack:get_name()
         if itemstack:is_empty() == false and itemname == lib.modname .. ":watering_can" then
-                local max_uses = lib.watering_can_max_uses
+								local nodepos = pos
+								local max_uses = lib.watering_can_max_uses
                 itemstack:add_wear(65535 / (max_uses))
                 local wear = itemstack:get_wear()
                 if wear >= 65535 then
@@ -371,8 +360,8 @@ function lib.register_plant(plant_name)
                 end -- if wear
 
                 local n = math.random(3, 4)
-                minetest.sound_play("water-splash-0".. n, {pos=pos, gain=1.2})
-                minetest.set_node(pos, {name = lib.modname .. ":pot_with_".. plant_name .."_3"})
+                minetest.sound_play("water-splash-0".. n, {pos=nodepos, gain=1.2})
+                minetest.set_node(nodepos, {name = lib.modname .. ":pot_with_".. plant_name .."_3"})
 
         end -- itemstack is watering_can
 
@@ -384,6 +373,16 @@ function lib.register_plant(plant_name)
     minetest.register_node(lib.modname .. ":pot_with_" .. plant_name .."_4",  table.copy(plant_def) )
 
 end -- register_plant
+
+
+--[[
+        **************************************************
+        **                                              **
+        **            register_wild_variant             **
+        **                                              **
+        **************************************************
+
+--]]
 
 function lib.register_wild_variant(plant_name, nodes, s, min, max)
 
@@ -439,14 +438,14 @@ function lib.register_wild_variant(plant_name, nodes, s, min, max)
 end -- function lib.register_wild_variant
 
 
-	--[[
-	        **************************************************
-	        **                                              **
-	        **              register_mushroom               **
-	        **                                              **
-	        **************************************************
-	        mushroom_name = "brown_mushroom" or "chanterelle" etc
-	--]]
+--[[
+        **************************************************
+        **                                              **
+        **              register_mushroom               **
+        **                                              **
+        **************************************************
+        mushroom_name = "brown" or "chanterelle" etc
+--]]
 
 
 function lib.register_mushroom(mushroom_name, full_mushroom_name)
@@ -458,30 +457,10 @@ function lib.register_mushroom(mushroom_name, full_mushroom_name)
 
 											end)
 
-  --register spore, override existing node to drop it seldomly
-	-- SPORE DEFINITION --
-	minetest.register_craftitem(lib.modname .. ":".. mushroom_name .."_spores", {
-			description = S(mushroom_desc .. " Mushroom Spores"),
-			inventory_image = lib.modname .. "_".. mushroom_name .."_spores.png",
-			groups = {spores = 1, flammable = 2,},
-
-	}) -- register_craftitem(
-
-	minetest.override_item(full_mushroom_name, {
-		drop =  {
-				items = {
-						{items = {full_mushroom_name}, rarity = 1},
-						{items = {full_mushroom_name .."_spores"}, rarity = 8},
-
-				} -- items
-
-		}, -- drop
-	})
-
 	local mushroom_def = table.copy(pot_def)
 	mushroom_def.description = S("Pot with ") .. S(mushroom_desc)
 
-	--POTTED MUSHROOM STAGE 1 : just planted, gives back spores
+	--POTTED MUSHROOM STAGE 1 : just planted, gives back one mushroom
 	mushroom_def.tiles[3] = "pot_with_soil_side.png^" .. lib.modname .. "_".. mushroom_name .."_1.png"
 	mushroom_def.tiles[4] = "pot_with_soil_side.png^" .. lib.modname .. "_".. mushroom_name .."_1.png"
 	mushroom_def.tiles[5] = "pot_with_soil_side.png^" .. lib.modname .. "_".. mushroom_name .."_1.png"
@@ -489,7 +468,7 @@ function lib.register_mushroom(mushroom_name, full_mushroom_name)
 	mushroom_def.drop = {
 			items = {
 					{items = {lib.modname .. ":pot_with_soil"} },
-					{items = {lib.modname .. ":" .. mushroom_name .."_spores"} },
+					{items = {full_mushroom_name} },
 
 					},
 
@@ -501,7 +480,7 @@ function lib.register_mushroom(mushroom_name, full_mushroom_name)
 									 lib.modname .. ":pot_with_".. mushroom_name .."_2", 30, 15)
 
 
-	--POTTED MUSHROOM STAGE 2 : growing, if you click you will get one, and goes back to 1
+	--POTTED MUSHROOM STAGE 2 : growing, if you click you will get one mushroom, and goes back to 1
 	mushroom_def.tiles[3] = "pot_with_soil_side.png^" .. lib.modname .. "_".. mushroom_name .."_2.png"
 	mushroom_def.tiles[4] = "pot_with_soil_side.png^" .. lib.modname .. "_".. mushroom_name .."_2.png"
 	mushroom_def.tiles[5] = "pot_with_soil_side.png^" .. lib.modname .. "_" ..mushroom_name .."_2.png"
@@ -509,7 +488,7 @@ function lib.register_mushroom(mushroom_name, full_mushroom_name)
 	mushroom_def.drop = {
 			items = {
 					{items = {lib.modname .. ":pot_with_soil"} },
-					{items = {full_mushroom_name }, rarity = 1},
+					{items = {full_mushroom_name } },
 					{items = {full_mushroom_name }, rarity = 2},
 
 			}, -- items
@@ -519,21 +498,27 @@ function lib.register_mushroom(mushroom_name, full_mushroom_name)
 	mushroom_def.on_rightclick = function (pos, node, player, itemstack, pointed_thing)
 			if player:is_player() then
 					local itemname = itemstack:get_name()
-					if itemstack:is_empty() == true then
+					if itemname ~= lib.modname ..":watering_can" then
 
-							local inv = player:get_inventory()
-							if inv:room_for_item("main", full_mushroom_name) then
-									inv:add_item("main", full_mushroom_name)
+						local nodepos = pos
+						local q = math.random(1, 2)
+						local leftover
 
-							else
-									minetest.add_item(pos, full_mushroom_name )
+						local inv = player:get_inventory()
+						if inv:room_for_item("main", full_mushroom_name .." ".. q) then
+								leftover = inv:add_item("main", full_mushroom_name .." ".. q)
+								if not leftover:is_empty() then
+									minetest.add_item(player:get_pos(), leftover)
+								end
+						else
+								minetest.add_item(player:get_pos(), full_mushroom_name .." ".. q)
 
-							end
+						end
 
-							local n = math.random(1, 3)
-							minetest.sound_play("foliage-0".. n, {pos=pos, gain=1.2})
+						local n = math.random(1, 3)
+						minetest.sound_play("foliage-0".. n, {pos=nodepos, gain=1.2})
 
-							minetest.set_node(pos, {name = lib.modname .. ":pot_with_".. mushroom_name .."_1"})
+						minetest.set_node(nodepos, {name = lib.modname .. ":pot_with_".. mushroom_name .."_1"})
 
 					end -- itemstack empty
 
@@ -549,19 +534,18 @@ function lib.register_mushroom(mushroom_name, full_mushroom_name)
 									 lib.modname .. ":pot_with_".. mushroom_name .."_3", 30, 10)
 
 
-	--POTTED MUSHROOM STAGE 3 : fully grown, click to get 2-4, chance to give spores, goes back to 2, FINAL STAGE
+	--POTTED MUSHROOM STAGE 3 : fully grown, click to get 2-4 mushrooms, goes back to 2, FINAL STAGE
 
-	mushroom_def.tiles[3] = "pot_with_soil_side.png^" .. lib.modname .. "_".. mushroom_name .."_2.png"
-	mushroom_def.tiles[4] = "pot_with_soil_side.png^" .. lib.modname .. "_".. mushroom_name .."_2.png"
-	mushroom_def.tiles[5] = "pot_with_soil_side.png^" .. lib.modname .. "_" ..mushroom_name .."_2.png"
-	mushroom_def.tiles[6] = "pot_with_soil_side.png^" .. lib.modname .. "_".. mushroom_name .."_2.png"
+	mushroom_def.tiles[3] = "pot_with_soil_side.png^" .. lib.modname .. "_".. mushroom_name .."_3.png"
+	mushroom_def.tiles[4] = "pot_with_soil_side.png^" .. lib.modname .. "_".. mushroom_name .."_3.png"
+	mushroom_def.tiles[5] = "pot_with_soil_side.png^" .. lib.modname .. "_" ..mushroom_name .."_3.png"
+	mushroom_def.tiles[6] = "pot_with_soil_side.png^" .. lib.modname .. "_".. mushroom_name .."_3.png"
 	mushroom_def.drop = {
 			items = {
 					{items = {lib.modname .. ":pot_with_soil"} },
 					{items = {full_mushroom_name .." 2"}, rarity = 1},
 					{items = {full_mushroom_name }, rarity = 2},
 					{items = {full_mushroom_name }, rarity = 4},
-					{items = {lib.modname .. ":"..mushroom_name .."_spores" }, rarity = 5},
 
 			}, -- items
 
@@ -570,35 +554,27 @@ function lib.register_mushroom(mushroom_name, full_mushroom_name)
 	mushroom_def.on_rightclick = function (pos, node, player, itemstack, pointed_thing)
 			if player:is_player() then
 					local itemname = itemstack:get_name()
-					if itemstack:is_empty() == true then
+					if itemname ~= lib.modname ..":watering_can" then
 
-							local q = math.random(2, 4)																									-- number of mushrooms taken
-							local spore = math.random(1, 5)                                             -- chance of getting a stem
+						local nodepos = pos
+						local q = math.random(2, 4)																									-- number of mushrooms taken
+						local leftover
 
-							local inv = player:get_inventory()
-							if inv:room_for_item("main", full_mushroom_name .." ".. q) then
-									inv:add_item("main", full_mushroom_name .." ".. q)
+						local inv = player:get_inventory()
+						if inv:room_for_item("main", full_mushroom_name .." ".. q) then
+								leftover = inv:add_item("main", full_mushroom_name .." ".. q)
+								if not leftover:is_empty() then
+									minetest.add_item(player:get_pos(), leftover)
+								end
+						else
+								minetest.add_item(nodepos, full_mushroom_name .." ".. q)
 
-							else
-									minetest.add_item(pos, full_mushroom_name .." ".. q)
+						end
 
-							end
+						local n = math.random(1, 3)
+						minetest.sound_play("foliage-0".. n, {pos=nodepos, gain=1.2})
 
-							if spore == 1 then
-									if inv:room_for_item("main", lib.modname .. ":"..mushroom_name .."_spores") then
-											inv:add_item("main", lib.modname .. ":"..mushroom_name .."_spores")
-									else
-
-											minetest.add_item(pos, lib.modname .. ":"..mushroom_name .."_spores")
-
-									end -- if inv.room
-
-							end -- if spore
-
-							local n = math.random(1, 3)
-							minetest.sound_play("foliage-0".. n, {pos=pos, gain=1.2})
-
-							minetest.set_node(pos, {name = lib.modname .. ":pot_with_".. mushroom_name .."_1"})
+						minetest.set_node(nodepos, {name = lib.modname .. ":pot_with_".. mushroom_name .."_1"})
 
 					end -- itemstack empty
 
@@ -629,26 +605,29 @@ function lib.register_mushroom(mushroom_name, full_mushroom_name)
 	mushroom_def.on_rightclick = function (pos, node, player, itemstack, pointed_thing)
 			if player:is_player() then
 					local itemname = itemstack:get_name()
-					if itemstack:is_empty() == true then
+					if itemname ~= lib.modname ..":watering_can" then
 
-							local q = math.random(1, 3) 																								-- number of mushrooms taken
-							--local shroom =  full_mushroom_name .." ".. q
+						local nodepos = pos
+						local q = math.random(1, 3) 																								-- number of mushrooms taken
+						local leftover
 
-							local inv = player:get_inventory()
-							if inv:room_for_item("main", full_mushroom_name .." ".. q) then
-									inv:add_item("main", full_mushroom_name .." ".. q)
+						local inv = player:get_inventory()
+						if inv:room_for_item("main", full_mushroom_name .." ".. q) then
+								leftover = inv:add_item("main", full_mushroom_name .." ".. q)
+								if not leftover:is_empty() then
+									minetest.add_item(player:get_pos(), leftover)
+								end
+						else
+								minetest.add_item(nodepos, full_mushroom_name .." ".. q)
 
-							else
-									minetest.add_item(pos, full_mushroom_name .." ".. q)
+						end
 
-							end
+						local n = math.random(1, 3)
+						minetest.sound_play("foliage-0".. n, {pos=nodepos, gain=1.2})
 
-							local n = math.random(1, 3)
-							minetest.sound_play("foliage-0".. n, {pos=pos, gain=1.2})
+						minetest.set_node(nodepos, {name = lib.modname .. ":pot_with_soil"})
 
-							minetest.set_node(pos, {name = lib.modname .. ":pot_with_soil"})
-
-					end -- itemstack empty
+				end -- itemstack empty
 
 			end-- player is a player
 
@@ -661,7 +640,7 @@ function lib.register_mushroom(mushroom_name, full_mushroom_name)
 	-- DRYING UP ABM
 
   minetest.register_abm({
-      label = "drying_potted_mushroom_amb",
+      label = "drying_potted_mushroom_abm",
       nodenames = {
 				lib.modname.. ":pot_with_".. mushroom_name .."_1",
 				lib.modname.. ":pot_with_".. mushroom_name .."_2",
@@ -686,7 +665,14 @@ function lib.register_mushroom(mushroom_name, full_mushroom_name)
 end -- function lib.register_mushroom
 
 
+--[[
+        **************************************************
+        **                                              **
+        **            check_free_space_above            **
+        **                                              **
+        **************************************************
 
+--]]
 
 function lib.check_free_space_above(pot_pos)
 	local above_pos = vector.add(pot_pos, vector.new(0, 1, 0))
@@ -697,22 +683,33 @@ function lib.check_free_space_above(pot_pos)
 	end
 	return false
 
-end
+end -- function lib.check_free_space_above
+
+
+--[[
+        **************************************************
+        **                                              **
+        **             register_sapling_abm             **
+        **                                              **
+        **************************************************
+
+--]]
 
 function lib.register_sapling_abm(nodename, shrub_nodename, leaves_nodename, fruit , delay, percentage)
+	local potted_plant = lib.fruit_tree_list[fruit]
 
 	minetest.register_abm({
-			label = "growing_potted_".. fruit .."_sapling_amb",
+			label = "growing_potted_".. fruit .."_sapling_abm",
 			nodenames = {nodename},
 			--neighbors = {"default:air"}, --can be omitted
 			interval = delay,
 			chance = percentage,
 			action = function(pos, node, active_object_count, active_object_count_wider)
-				local potted_plant = lib.fruit_tree_list[fruit]
 				local nodepos = pos
-				local above_nodepos = vector.add(pos, vector.new(0, 1, 0))
+				local above_nodepos = vector.add(nodepos, vector.new(0, 1, 0))
+				local enough_light = lib.check_light(above_nodepos, potted_plant[5], potted_plant[6])
 
-				if lib.check_free_space_above(nodepos) and lib.check_light(above_nodepos, potted_plant[5], potted_plant[6])  then
+				if lib.check_free_space_above(nodepos) and enough_light then
 						minetest.swap_node(nodepos, {name = shrub_nodename})
 						minetest.swap_node(above_nodepos, {name = leaves_nodename})
 
@@ -721,35 +718,52 @@ function lib.register_sapling_abm(nodename, shrub_nodename, leaves_nodename, fru
 			end, -- action =
 
 	})
-end
 
-function lib.register_leaves_amb(nodename, fruit_leaves_nodename, thirsty_leaves_nodename, fruit, delay, percentage)
+end -- function lib.register_sapling_abm
+
+
+	--[[
+	        **************************************************
+	        **                                              **
+	        **             register_leaves_abm              **
+	        **                                              **
+	        **************************************************
+
+	--]]
+
+function lib.register_leaves_abm(nodename, fruit_leaves_nodename, thirsty_leaves_nodename, fruit, delay, percentage)
+	local potted_plant = lib.fruit_tree_list[fruit]
 
 	minetest.register_abm({
-			label = "growing_potted_".. fruit .."_leaves_amb",
+			label = "growing_potted_".. fruit .."_leaves_abm",
 			nodenames = {nodename},
 			--neighbors = {"default:air"}, --can be omitted
 			interval = delay,
 			chance = percentage,
 			action = function(pos, node, active_object_count, active_object_count_wider)
-				local potted_plant = lib.fruit_tree_list[fruit]
 				local nodepos = pos
-				--[[
-				]]--
-				if lib.check_light(nodepos, potted_plant[5], potted_plant[6] ) then
+				local leaves_nodename = thirsty_leaves_nodename
+				local enough_light = lib.check_light(nodepos, potted_plant[5], potted_plant[6] )
+
+				local meta = minetest.get_meta(nodepos)
+				local pot_light = meta:get_int("lightlevel")
+
+				minetest.chat_send_all("leaves abm ".. fruit .. " enough_light ".. tostring(enough_light) .." light at pos ".. pot_light)
+				if enough_light then
 					local growth = math.random(1, 3)
-					--local leaves_name = thirsty_leaves_nodename
+
 					if growth == 1 then
-						minetest.swap_node(nodepos, {name = fruit_leaves_nodename})
+						leaves_nodename = fruit_leaves_nodename
 					end
-					minetest.swap_node(nodepos, {name = thirsty_leaves_nodename})
 
 				end -- if(lib.check
+				minetest.swap_node(nodepos, {name = leaves_nodename} )
 
 			end, -- action =
 
 	})
-end
+
+end -- function lib.register_leaves_abm
 
 
 		--[[
@@ -761,10 +775,15 @@ end
 		sapling_name = "ethereal:lemon_tree_sapling", full_fruit_name = "ethereal:lemon"
 		--]]
 
-function lib.register_fruit_tree (k, sapling_name, full_fruit_name, leaves_png)
+function lib.register_fruit_tree (k, sapling_name, full_fruit_name, original_leaves_png)
 	-- from sapling a litte potted tree
 	local fruit_mod_name = full_fruit_name:split(":")[1]
 	local fruit_name = k
+
+	local leaves_png = original_leaves_png
+	if leaves_png == nil then
+		leaves_png = "default_leaves.png"
+	end
 
 	local shrub_def = table.copy(pot_def)
 	shrub_def.description = S("Pot with ") .. S(fruit_name)
@@ -786,71 +805,13 @@ function lib.register_fruit_tree (k, sapling_name, full_fruit_name, leaves_png)
 	minetest.register_node(lib.modname.. ":pot_with_".. fruit_name .."_sapling",  table.copy(shrub_def) )
 
 	lib.register_sapling_abm(lib.modname.. ":pot_with_".. fruit_name .."_sapling",
-													 lib.modname.. ":pot_with_".. fruit_name .."_shrub",
+													 lib.modname.. ":pot_with_shrub",
 													 lib.modname.. ":".. fruit_name .."_leaves_1", fruit_name, 20, 10)
 
 	-- STAGE 2 pot with shrub : does not grow but is the base for the leaf node above
-	shrub_def.tiles[3] = "pot_with_soil_side.png^" .. lib.modname .. "_shrub.png"
-	shrub_def.tiles[4] = "pot_with_soil_side.png^" .. lib.modname .. "_shrub.png"
-	shrub_def.tiles[5] = "pot_with_soil_side.png^" .. lib.modname .. "_shrub.png"
-	shrub_def.tiles[6] = "pot_with_soil_side.png^" .. lib.modname .. "_shrub.png"
-	shrub_def.walkable = true
-	shrub_def.drop = {
-			items = {
-					{items = {lib.modname .. ":pot_with_soil"} },
-					{items = {"default:stick"} },
 
-			}, -- items
-
-	} -- shrub_def.drop
-	shrub_def.selection_box = {
-			type = "fixed",
-			fixed = {
-					{-0.25, -0.5, -0.25, 0.25, 0.5, 0.25},                                 -- selection
-
-			}
-
-	} -- higher selection_box
-
-	shrub_def.collision_box = {
-			type = "fixed",
-			fixed = {
-					{-0.25, -0.5, -0.25, 0.25, 0.5, 0.25},                                 -- selection
-
-			}
-
-	} -- higher collision_box
-	shrub_def.on_rightclick = function (pos, node, player, itemstack, pointed_thing)
-			if player:is_player() then
-			local itemname = itemstack:get_name()
-			if itemstack:is_empty() == false and itemname == lib.modname .. ":watering_can" then
-				local possible_leaf_pos = vector.add(pos, vector.new(0, 1, 0))
-				local possible_leaf = minetest.get_node(possible_leaf_pos)
-				if possible_leaf.name == lib.modname ..":".. fruit_name .."_leaves_3" then
-					local max_uses = lib.watering_can_max_uses
-					itemstack:add_wear(65535 / (max_uses))
-					local wear = itemstack:get_wear()
-					if wear >= 65535 then
-							itemstack:replace(lib.modname .. ":empty_watering_can")
-
-					end -- if wear
-
-					local n = math.random(3, 4)
-					minetest.sound_play("water-splash-0".. n, {pos=pos, gain=1.2})
-					minetest.set_node(possible_leaf_pos, {name = lib.modname .. ":".. fruit_name .."_leaves_1"})
-
-				end -- if node above is thirsty leaves
-
-			end -- itemstack is watering_can
-
-			end -- player is a player
-			return itemstack
-
-end -- shrub_def.on_rightclick
-
--- no further action is required, the leaves should fall on their own, as they too are an attached_node
-
-	minetest.register_node(lib.modname.. ":pot_with_".. fruit_name .."_shrub",  table.copy(shrub_def) )
+	-- MOVED to nodes.lua , registering one and only one shrub, im keeping the register_sapling_abm as it is
+	--											because i could have plants with a different shrub, like banana
 
 	-- ABOVE shrub, leaves : if the leaves are destroyed, the pot below is destroyed too, and viceversa
 	local fruit_desc = fruit_name:gsub("(%a)(%a+)",
@@ -882,9 +843,9 @@ end -- shrub_def.on_rightclick
 	minetest.register_node(lib.modname.. ":".. fruit_name .."_leaves_1",  table.copy(leaves_def) )
 
 	-- special abm, with some randomness to determine wheather leaves should go to fruit leaves or thristy leaves
-	lib.register_leaves_amb(lib.modname.. ":".. fruit_name .."_leaves_1",
+	lib.register_leaves_abm(lib.modname.. ":".. fruit_name .."_leaves_1",
 	 												lib.modname.. ":".. fruit_name .."_leaves_2",
-													lib.modname.. ":".. fruit_name .."_leaves_3", fruit_name, 20, 10)
+													lib.modname.. ":".. fruit_name .."_leaves_3", fruit_name, 5, 30)
 
 	-- STAGE 2 : lemon leaves 2 : gives 2-3 lemons, does not grow more, goes back to leaves 1 when harvested
 
@@ -897,25 +858,28 @@ end -- shrub_def.on_rightclick
 	leaves_def.on_rightclick = function (pos, node, player, itemstack, pointed_thing)
 			if player:is_player() then
 					local itemname = itemstack:get_name()
-					if itemstack:is_empty() == true then
+					if itemname ~= lib.modname ..":watering_can" then
 
-							local q = math.random(2, 3)																									-- number of fruit taken
-							local leftover
-							local item = full_fruit_name .." ".. q
+						local nodepos = pos
+						local q = math.random(2, 3)																									-- number of fruit taken
+						local leftover
+						local item = ItemStack(full_fruit_name .." ".. q)
 
-							local inv = player:get_inventory()
-							if inv:room_for_item("main", item) then
-									leftover = inv:add_item("main", item)
-									--minetest.chat_send_player(player:get_player_name(), "inv ".. item)
-							else
-									minetest.add_item(pos, item)
+						local inv = player:get_inventory()
+						if inv:room_for_item("main", item) then
+								leftover = inv:add_item("main", item)
+								if not leftover:is_empty() then
+									minetest.add_item(player:get_pos(), leftover)
+								end
+						else
+								minetest.add_item(player:get_pos(), item)
 
-							end
+						end
 
-							local n = math.random(1, 3)
-							minetest.sound_play("foliage-0".. n, {pos=pos, gain=1.2})
+						local n = math.random(1, 3)
+						minetest.sound_play("foliage-0".. n, {pos=nodepos, gain=1.2})
 
-							minetest.set_node(pos, {name = lib.modname.. ":".. fruit_name .."_leaves_1"})
+						minetest.set_node(nodepos, {name = lib.modname.. ":".. fruit_name .."_leaves_1"})
 
 					end -- itemstack empty
 
@@ -929,9 +893,9 @@ end -- shrub_def.on_rightclick
 
 	-- lemon leaves 3 : needs water, does not grow, goes back to leaves 1 when the POT is watered
 
-	leaves_def.tiles = { leaves_png .. "^[colorize:yellow:40" }
+	leaves_def.tiles = { leaves_png .. "^[colorize:yellow:30" }
 	leaves_def.drop = {}
 
 	minetest.register_node(lib.modname.. ":".. fruit_name .."_leaves_3",  table.copy(leaves_def) )
 
-end
+end -- function lib.register_fruit_tree

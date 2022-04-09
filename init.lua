@@ -28,7 +28,7 @@ pf.plant_list = {
 -- name,          definable, wild parameters: place_on (found on),                                                     scale, y min max; min max lightlevel to grow
   ["basil"] =     {true,   {"default:dirt_with_grass", "default:dirt", "ethereal:praire_dirt", "ethereal:grove:dirt"},  0.0003, 0, 250, 11, 15},
   ["rosemary"] =  {true,   {"default:dirt_with_coniferous_litter", "default:dirt_with_snow", "ethereal:gray_dirt"},     0.0005, 10, 300, 10, 15},
-  ["sage"] =      {false,  {"default:permafrost_with_moss", "default:dirt_with_grass", "ethereal:cold_dirt"},           0.0004, 0, 250, 12, 15},
+  ["sage"] =      {true,   {"default:permafrost_with_moss", "default:permafrost_with_stones", "default:dirt_with_grass", "ethereal:cold_dirt"},           0.0004, 0, 400, 12, 15},
 
 }
 
@@ -43,7 +43,7 @@ pf.mushroom_list = {
   --name      definable, full_mushroom_name, min max lightlevel to grow
   ["brown"]        = {true, "flowers:mushroom_brown",       0, 11},
   ["cantharellus"] = {true, "herbs:mushroom_cantharellus",  0, 11},
-  ["boletus"]      = {false, "herbs:mushroom_boletus",      0, 12},
+  ["boletus"]      = {true, "herbs:mushroom_boletus",       0, 12},
 }
 
 for k, v in pairs(pf.mushroom_list) do
