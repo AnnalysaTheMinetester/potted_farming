@@ -8,4 +8,9 @@ Watering Can=Gießkanne
 
 ### lib.lua ###
 
+ Stem= Stamm
 Wild =Wilde(r)
+
+### nodes.lua ###
+
+Pot with Soil=Topf mit Erde

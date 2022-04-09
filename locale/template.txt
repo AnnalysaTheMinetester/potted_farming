@@ -8,4 +8,9 @@ Watering Can=
 
 ### lib.lua ###
 
+ Stem=
 Wild =
+
+### nodes.lua ###
+
+Pot with Soil=
