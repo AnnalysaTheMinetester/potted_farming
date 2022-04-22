@@ -1,0 +1,38 @@
+# textdomain: potted_farming
+
+
+### items.lua ###
+
+Empty Watering Can=Arrosoir Vide
+
+### lib.lua ###
+
+Pot with =Vase avec 
+
+Basil=Basilic
+Rosemary=Romarin
+Sage=Sauge
+Parsley=Persil
+ Stem= avec Tige
+Wild =Sauvage
+
+Brown=Brun
+Cantharellus=Chanterelle
+Boletus=Bolet
+
+Lemon=Citron
+Orange=Orange
+Apple=Pomme
+ (Leaves)= (Feuilles)
+
+### nodes.lua ###
+
+Pot with Soil=Vase avec de la Terre
+Pot with Shrub=Vase avec Arbuste
+
+### tools.lua ###
+
+Watering Can=Arrosoir
+
+
+##### not used anymore #####

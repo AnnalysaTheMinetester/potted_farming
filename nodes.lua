@@ -1,5 +1,6 @@
 local pf = potted_farming
 local S = pf.S
+local max_uses = pf.watering_can_max_uses
 
 -- Pot to plant
 minetest.register_node(pf.modname .. ":pot_with_soil", {
@@ -138,16 +139,11 @@ minetest.register_node(pf.modname ..":pot_with_shrub", {
 				end -- fruit_tree_list iteration
 
 				if fruit_name ~= nil then
-					local max_uses = pf.watering_can_max_uses
-					itemstack:add_wear(65535 / (max_uses))
-					local wear = itemstack:get_wear()
-					if wear >= 65535 then
-						itemstack:replace(pf.modname .. ":empty_watering_can")
+					itemstack = pf.add_watering_can_wear(itemstack)
 
-					end -- if wear
 					local n = math.random(3, 4)
 					minetest.sound_play("water-splash-0".. n, {pos=nodepos, gain=1.2})
-					minetest.set_node(possible_leaf_pos, {name = pf.modname .. ":".. fruit_name .."_leaves_1"})
+					minetest.swap_node(possible_leaf_pos, {name = pf.modname .. ":".. fruit_name .."_leaves_1"})
 
 				end -- if node above is ANY thirsty leaves
 

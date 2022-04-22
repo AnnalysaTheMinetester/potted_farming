@@ -1,9 +1,10 @@
 potted_farming = {}
 
 local pf = potted_farming
-pf.version = 3.0
+pf.version = 3.9
 pf.modname = minetest.get_current_modname()
 pf.path = minetest.get_modpath(pf.modname)
+pf.plant_settings = {}
 pf.watering_can_max_uses = 5
 
 local S
@@ -18,6 +19,7 @@ end
 
 pf.S = S
 
+dofile(pf.path .. "/settings.lua")
 dofile(pf.path .. "/lib.lua")
 dofile(pf.path .. "/nodes.lua")
 dofile(pf.path .. "/items.lua")
@@ -25,44 +27,50 @@ dofile(pf.path .. "/tools.lua")
 dofile(pf.path .. "/recipes.lua")
 
 pf.plant_list = {
--- name,          definable, wild parameters: place_on (found on),                                                     scale, y min max; min max lightlevel to grow
-  ["basil"] =     {true,   {"default:dirt_with_grass", "default:dirt", "ethereal:praire_dirt", "ethereal:grove:dirt"},  0.0003, 0, 250, 11, 15},
-  ["rosemary"] =  {true,   {"default:dirt_with_coniferous_litter", "default:dirt_with_snow", "ethereal:gray_dirt"},     0.0005, 10, 300, 10, 15},
-  ["sage"] =      {true,   {"default:permafrost_with_moss", "default:permafrost_with_stones", "default:dirt_with_grass", "ethereal:cold_dirt"},           0.0004, 0, 400, 12, 15},
-
+-- name,          wild parameters: place_on (found on)
+  ["basil"] =     { {"default:dirt_with_grass", "default:dirt", "ethereal:praire_dirt", "ethereal:grove_dirt"},                            pf.plant_settings.basil.scale, 0,  250, 11, 15,},
+  ["rosemary"] =  { {"default:dirt_with_coniferous_litter", "default:dirt_with_snow", "ethereal:gray_dirt", "ethereal:cold_dirt"},         pf.plant_settings.rosemary.scale, 10, 300, 10, 15,},
+  ["sage"] =      { {"default:permafrost_with_moss", "default:permafrost_with_stones", "default:dirt_with_grass", "ethereal:cold_dirt"},   pf.plant_settings.sage.scale, 30, 400, 12, 15,},
+  ["parsley"] =   { {"default:dirt_with_grass", "ethereal:praire_dirt", "default:dirt_with_dry_grass", "default:dry_dirt_with_dry_grass"}, pf.plant_settings.parsley.scale, 0,  300, 12, 15,},
 }
 
+
+
 for k, v in pairs(pf.plant_list) do
-  if v[1] then
+  local ps = pf.plant_settings[k]
+  if ps.definable then
   	pf.register_plant(k)
-  	pf.register_wild_variant(k, v[2], v[3], v[4], v[5] )
+  	pf.register_wild_variant(k, v[1], ps.scale, ps.min_hight, ps.max_hight )
   end
 end
 
 pf.mushroom_list = {
-  --name      definable, full_mushroom_name, min max lightlevel to grow
-  ["brown"]        = {true, "flowers:mushroom_brown",       0, 11},
-  ["cantharellus"] = {true, "herbs:mushroom_cantharellus",  0, 11},
-  ["boletus"]      = {true, "herbs:mushroom_boletus",       0, 12},
+  --name              full_mushroom_name
+  ["brown"]        = {"flowers:mushroom_brown",},
+  ["cantharellus"] = {"herbs:mushroom_cantharellus",},
+  ["boletus"]      = {"herbs:mushroom_boletus",},
 }
 
 for k, v in pairs(pf.mushroom_list) do
-  if v[1] and minetest.registered_items[v[2]] then
-  	pf.register_mushroom(k, v[2])
+  local ps = pf.plant_settings[k]
+  if ps.definable and minetest.registered_items[v[1]] then
+  	pf.register_mushroom(k, v[1])
   end
 end
 
 pf.fruit_tree_list = {
-  --name      definable,       sapling_name,            fruit_name,              leaves_name,           min max lightlevel to grow
-  ["lemon"]  = {true, "ethereal:lemon_tree_sapling",  "ethereal:lemon",   "ethereal_lemon_leaves.png",  12, 15},
-  ["orange"] = {true, "ethereal:orange_tree_sapling", "ethereal:orange",  "ethereal_orange_leaves.png", 12, 15},
-  ["apple"]  = {true, "default:sapling",              "default:apple",    "default_leaves.png",         12, 15},
+  --name                sapling_name,            fruit_name,              leaves_name,
+  ["lemon"]  = {"ethereal:lemon_tree_sapling",  "ethereal:lemon",   "ethereal_lemon_leaves.png",},
+  ["orange"] = {"ethereal:orange_tree_sapling", "ethereal:orange",  "ethereal_orange_leaves.png",},
+  ["apple"]  = {"default:sapling",              "default:apple",    "default_leaves.png",},
 }
 
 for k, v in pairs(pf.fruit_tree_list) do
-  if v[1] and minetest.registered_items[v[2]] then
-  	pf.register_fruit_tree(k, v[2], v[3], v[4])
+  local ps = pf.plant_settings[k]
+  if ps.definable and minetest.registered_items[v[2]] then
+  	pf.register_fruit_tree(k, v[1], v[2], v[3])
   end
 end
+
 
 minetest.log("ACTION", "[MOD] " .. pf.modname .. " successfully loaded.")

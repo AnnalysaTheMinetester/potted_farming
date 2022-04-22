@@ -12,15 +12,13 @@ Pot with =
 Basil=
 Rosemary=
 Sage=
+Parsley=
  Stem=
 Wild =
 
 Brown=
 Cantharellus=
 Boletus=
-Brown Mushroom Spores=
-Cantharellus Mushroom Spores=
-Boletus Mushroom Spores=
 
 Lemon=
 Orange=

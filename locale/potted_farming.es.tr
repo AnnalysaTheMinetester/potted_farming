@@ -1,0 +1,37 @@
+# textdomain: potted_farming
+
+
+### items.lua ###
+
+Empty Watering Can=Regadera Vacia
+
+### lib.lua ###
+
+Pot with =Florero con 
+
+Basil=Albahaca
+Rosemary=Romero
+Sage=Sabio
+Parsley=Perejil
+ Stem= con Raíz
+Wild =Salvaje
+
+Brown=Marrón
+Cantharellus=Gallinaccio
+Boletus=Boleto
+
+Lemon=Limón
+Orange=Naranja
+Apple=Manzana
+ (Leaves)= (Hojas)
+
+### nodes.lua ###
+
+Pot with Soil=Florero con Tierra
+Pot with Shrub=Florero con Arbusto
+
+### tools.lua ###
+
+Watering Can=Regadera
+
+##### not used anymore ####

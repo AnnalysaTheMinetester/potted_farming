@@ -12,9 +12,8 @@ The essential item, the whole point of the mod. You will need bricks and dirt, a
 #### Watering Can
 
 Some plants require your care, with you having to craft a watering can to give them water from time to time.
-After all you are planting in a pot, not in the soil near water, so you are its only source of hydration.
-It can hold very little water, afterall the plants do not require much, therefor it doesn't clear a whole water node.
-Speaking of which, you can fill it also with homedecor items like the sink and well.
+After all, you are planting in a pot, not in the soil near water, so you are its only source of hydration.
+It can hold very little water, afterall the plants do not require much, therefor filling the watering can doesn't clear a whole water node. Speaking of which, you can fill it also with homedecor items like the sink and well.
 
 ## Plants and Herbs
 
@@ -23,11 +22,18 @@ Planting it in a pot starts your journey as a pot farmer!
 If there is enough light, it will grow and after a while you can harvest some leaves, without removing the whole plant!
 If you don't harvest it, it will become thristy and you'll have to use the watering can. You will not loose the plant.
 
+#### Plants present currently:
+Basil, Rosemary, Sage, Parsley
+Rosemary and Parsley can be existing items from [farming] or [cucina_vegana]
+
 ## Mushrooms
 
 Are you tired of building a dark room to grow mushrooms and wait for them ages to grow only to harvest few of them?
 Well ... you will build the same room, mushrooms require darkness, but at least you can harvest more than one
 mushroom and they will regrow from the same pot!
+
+#### Mushrooms present currently:
+Brown Mushroom from [default], Chanterelle and Boletus from [herbs]
 
 ## Fruit trees
 
@@ -36,3 +42,14 @@ Plant a regular sapling and wait, it will eventually grow into a 2 node tall tre
 The leaves after some time will either grow 2 to 3 fruits that you can harvest, without hurting the tree, again no
 need to replant over and over, or they will be tinted in yellow, meaning the tree is now thristy, in that case
 you need to pour water into the pot.
+
+#### Fruit trees present currently:
+Lemon and Orange from [ethereal], Apple from [default]
+
+### License
+
+Code and Textures by Annalysa.
+Sounds have their own license file in the sounds folder.
+A special thanks to *clyde*, that helped me a lot with the code.
+
+##### Italian, Dutch, French, Spanish traslations available

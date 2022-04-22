@@ -6,7 +6,7 @@ se prendo un fungo non raccolgo nulla, ma subito dopo poso una foglia con limoni
 limoni allora prendo sia funghi che basilico
 TROVATO IL MOTIVO
 se clicco per raccogliere una qualsiasi cosa, e dovrebbe andare su un altro slot, l'oggetto viene aggiunto correttamente
-ma se il primo slot libero invece é la "mano", non viene sovrascritto e l'oggeto viene perso
+ma se il primo slot libero invece é la "mano", non viene sovrascritto e l'oggetto viene perso
 ecco perchè lo stem viene aggiunto, perchè viene messo nello slot a fianco della mano
 
 aggiustare tutti i valori di crescita
