@@ -1,7 +1,7 @@
 potted_farming = {}
 
 local pf = potted_farming
-pf.version = 3.9
+pf.version = 4.0
 pf.modname = minetest.get_current_modname()
 pf.path = minetest.get_modpath(pf.modname)
 pf.plant_settings = {}
