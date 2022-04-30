@@ -11,7 +11,7 @@ rosemary (Enable Rosemary) bool true
 rosemary_scale (Spreadvalue of wild variant) float 0.0005
 rosemary_min_hight (Min. Hight can be found on) int 10
 rosemary_max_hight (Max. Hight can be found on) int 300
-rosemary_min_light (Min. Light can grow) int 10
+rosemary_min_light (Min. Light can grow) int 11
 rosemary_max_light (Max. Light can grow) int 15
 
 # Sage
@@ -24,7 +24,7 @@ sage_max_light (Max. Light can grow) int 15
 
 # Parsley
 parsley (Enable Parsley) bool true
-parsley_scale     (Spreadvalue of wild variant) float 0.0003
+parsley_scale (Spreadvalue of wild variant) float 0.0003
 parsley_min_hight (Min. Hight can be found on) int 0
 parsley_max_hight (Max. Hight can be found on) int 300
 parsley_min_light (Min. Light can grow) int 12
@@ -32,18 +32,18 @@ parsley_max_light (Max. Light can grow) int 15
 
 # Brown Mushroom
 brown (Enable Brown Mushroom) bool true
-brown_min_light (Min. Light can grow) int 0
-brown_max_light (Max. Light can grow) int 11
+brown_min_light (Min. Light can grow) int 1
+brown_max_light (Max. Light can grow) int 5
 
 # Cantharellus Mushroom
 cantharellus (Enable Chanterelle Mushroom) bool true
-cantharellus_min_light (Min. Light can grow) int 0
-cantharellus_max_light (Max. Light can grow) int 11
+cantharellus_min_light (Min. Light can grow) int 1
+cantharellus_max_light (Max. Light can grow) int 7
 
 # Boletus Mushroom
 boletus (Enable Boletus Mushroom) bool true
 boletus_min_light (Min. Light can grow) int 0
-boletus_max_light (Max. Light can grow) int 12
+boletus_max_light (Max. Light can grow) int 5
 
 # Lemon Fruit Tree
 lemon (Enable Lemon Fruit Tree) bool true
@@ -61,9 +61,21 @@ apple_min_light (Min. Light can grow) int 12
 apple_max_light (Max. Light can grow) int 15
 
 # Replace with existing herb
+
 # Rosemary
-support_rosemary (Enable Rosemary to be swapped with existing item) bool true
+support_rosemary (Enable Rosemary to be swapped with existing item) bool false
 support_rosemary_itemname (Itemname that will replace upon harvesting) string "cucina_vegana:rosemary"
+
 # Parsley
-support_parsley (Enable Parsley to be swapped with existing item) bool true
+support_parsley (Enable Parsley to be swapped with existing item) bool false
 support_parsley_itemname (Itemname that will replace upon harvesting) string "farming:parsley"
+# possible parsley items (that i know of): farming:parsley , cucina_vegana:parsley
+
+# Lemon
+support_lemon (Enable Lemon to be from CoolTrees mod instead of Ethereal mod) bool false
+
+# Orange
+support_orange (Enable Orange to be from CoolTrees mod instead of Ethereal mod, using Clementine) bool false
+
+# Apple
+support_apple (Enable Apple Fruit Tree sapling and leaf texture to be taken from Moretrees mod) bool true

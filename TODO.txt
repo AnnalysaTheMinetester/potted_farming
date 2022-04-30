@@ -12,3 +12,5 @@ ecco perchè lo stem viene aggiunto, perchè viene messo nello slot a fianco del
 aggiustare tutti i valori di crescita
 
 ? add bonemeal custom support
+
+API?? what about the settings of added plants?

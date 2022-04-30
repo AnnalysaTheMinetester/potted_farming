@@ -1,16 +1,22 @@
 local pf = potted_farming
 local S = pf.S
 
+local h_k = minetest.get_modpath("homedecor_kitchen") ~= nil
+local h_b = minetest.get_modpath("homedecor_bathroom") ~= nil
+local h_e = minetest.get_modpath("homedecor_exterior") ~= nil
+
 local water_list = {
 	["default:water_source"] = true,
 	["default:water_flowing"] = true,
 	["default:river_water_source"] = true,
 	["default:river_water_flowing"] = true,
-	["homedecor:kitchen_faucet"] = minetest.get_modpath("homedecor_bathroom"),
-	["homedecor:sink"] = minetest.get_modpath("homedecor_bathroom"),
-	["homedecor:taps"] = minetest.get_modpath("homedecor_bathroom"),
-	["homedecor:taps_brass"] = minetest.get_modpath("homedecor_bathroom"),
-	["homedecor:well"] = minetest.get_modpath("homedecor_exterior"),
+	["homedecor:kitchen_cabinet_colorable_with_sink"] = h_k,
+	["homedecor:kitchen_cabinet_colorable_with_sink_locked"] = h_k,
+	["homedecor:kitchen_faucet"] = h_b,
+	["homedecor:sink"] = h_b,
+	["homedecor:taps"] = h_b,
+	["homedecor:taps_brass"] = h_b,
+	["homedecor:well"] = h_e,
 }
 
 minetest.register_craftitem(pf.modname .. ":empty_watering_can", {

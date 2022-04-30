@@ -69,17 +69,18 @@ function lib.is_acceptable_source (itemname)
 
 	if plant == nil then plant = ""	end
 
+	local s = lib.plant_settings
 	-- if plant is present in table AND the item in hand is the stem of that plant
-	if lib.plant_list[plant] and string.find(name , "_stem") and lib.plant_settings[plant].definable then
+	if lib.plant_list[plant] and string.find(name , "_stem") and s[plant].definable then
 		return true, "plant", plant
 	end
 	for k,v in pairs(lib.mushroom_list) do
-		if v[1] == itemname and lib.plant_settings[k].definable then
+		if v[1] == itemname and s[k].definable then
 			return true, "mushroom", k
 		end
 	end
 	for k,v in pairs(lib.fruit_tree_list) do
-		if v[1] == itemname and lib.plant_settings[k].definable then
+		if v[1] == itemname and s[k].definable then
 			return true, "fruit_tree", k
 		end
 	end
@@ -140,7 +141,8 @@ end -- function lib.check_light
 function lib.register_plant_abm(nodename, next_step_nodename, delay, percentage)
 		-- if the register_plant_abm function is called, then surely the plant is defined and registerable
 		-- mod_name:pot_with_PLANT_N
-		local plant_name = nodename:split(":")[2]:split("_")[3] -- as per naming convention, [3] is the given plant_name
+		local plant_name = nodename:split(":")[2]:split("_")[3]
+		 -- as per naming convention, [3] is the given plant_name
 		local potted_plant = lib.plant_settings[plant_name]
 		minetest.register_abm({
         label = "growing_potted_".. plant_name .."_abm",
@@ -195,11 +197,11 @@ end -- add_watering_can_wear
 
 function lib.get_leaf_item_name(plant_name)
 	local item_name = lib.modname .. ":" .. plant_name
-	local possible_support_for_existing_item = lib.plant_settings.support[plant_name]
-
-	if possible_support_for_existing_item ~= nil and possible_support_for_existing_item.can_grow  then
+	local p = lib.plant_settings.support[plant_name]
+	-- p = possible_support_for_existing_item
+	if p ~= nil and p.can_grow  then
 		-- the plant is present in the support AND can swap is set to true
-		local existing_item = possible_support_for_existing_item.itemname
+		local existing_item = p.itemname
 		local mod_name = existing_item:split(":")[1]
 
 		if minetest.get_modpath(mod_name) then
@@ -856,8 +858,8 @@ function lib.register_fruit_tree (k, sapling_name, full_fruit_name, original_lea
 
 	local leaves_def = {
 		description = S(fruit_desc) .. S(" (Leaves)"),
-		drawtype = "plantlike",
-		visual_scale = 1.4,
+		drawtype = "allfaces",
+		--visual_scale = 1.4,
 		walkable = false,
 		paramtype = light,
 		tiles = { leaves_png },

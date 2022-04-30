@@ -17,7 +17,7 @@ pf.plant_settings.rosemary.definable = minetest.settings:get_bool("rosemary",   
 pf.plant_settings.rosemary.scale     = minetest.settings:get("rosemary_scale")     or 0.0005
 pf.plant_settings.rosemary.min_hight = minetest.settings:get("rosemary_min_hight") or 10
 pf.plant_settings.rosemary.max_hight = minetest.settings:get("rosemary_max_hight") or 300
-pf.plant_settings.rosemary.min_light = minetest.settings:get("rosemary_min_light") or 10
+pf.plant_settings.rosemary.min_light = minetest.settings:get("rosemary_min_light") or 11
 pf.plant_settings.rosemary.max_light = minetest.settings:get("rosemary_max_light") or 15
 
 -- Sage
@@ -41,20 +41,20 @@ pf.plant_settings.parsley.max_light = minetest.settings:get("parsley_max_light")
 -- Brown Mushroom
 pf.plant_settings.brown = {}
 pf.plant_settings.brown.definable = minetest.settings:get_bool("brown",         true)
-pf.plant_settings.brown.min_light = minetest.settings:get("brown_min_light") or 0
-pf.plant_settings.brown.max_light = minetest.settings:get("brown_max_light") or 11
+pf.plant_settings.brown.min_light = minetest.settings:get("brown_min_light") or 1
+pf.plant_settings.brown.max_light = minetest.settings:get("brown_max_light") or 5
 
 -- Cantharellus Mushroom
 pf.plant_settings.cantharellus = {}
 pf.plant_settings.cantharellus.definable = minetest.settings:get_bool("cantharellus",         true)
-pf.plant_settings.cantharellus.min_light = minetest.settings:get("cantharellus_min_light") or 0
-pf.plant_settings.cantharellus.max_light = minetest.settings:get("cantharellus_max_light") or 11
+pf.plant_settings.cantharellus.min_light = minetest.settings:get("cantharellus_min_light") or 1
+pf.plant_settings.cantharellus.max_light = minetest.settings:get("cantharellus_max_light") or 7
 
 -- Boletus Mushroom
 pf.plant_settings.boletus = {}
 pf.plant_settings.boletus.definable = minetest.settings:get_bool("boletus",         true)
 pf.plant_settings.boletus.min_light = minetest.settings:get("boletus_min_light") or 0
-pf.plant_settings.boletus.max_light = minetest.settings:get("boletus_max_light") or 12
+pf.plant_settings.boletus.max_light = minetest.settings:get("boletus_max_light") or 5
 
 -- Lemon Fruit Tree
 pf.plant_settings.lemon = {}
@@ -74,13 +74,22 @@ pf.plant_settings.apple.definable = minetest.settings:get_bool("apple",         
 pf.plant_settings.apple.min_light = minetest.settings:get("apple_min_light") or 12
 pf.plant_settings.apple.max_light = minetest.settings:get("apple_max_light") or 15
 
--- Replace with existing herb
+-- Replace with existing item
 pf.plant_settings.support = {}
 -- Rosemary
 pf.plant_settings.support.rosemary = {}
-pf.plant_settings.support.rosemary.can_swap = minetest.settings:get_bool("support_rosemary",        true)
+pf.plant_settings.support.rosemary.can_swap = minetest.settings:get_bool("support_rosemary",        false)
 pf.plant_settings.support.rosemary.itemname = minetest.settings:get("support_rosemary_itemname") or "cucina_vegana:rosemary"
 -- Parsley
 pf.plant_settings.support.parsley = {}
-pf.plant_settings.support.parsley.can_swap = minetest.settings:get_bool("support_rosemary",        true)
+pf.plant_settings.support.parsley.can_swap = minetest.settings:get_bool("support_rosemary",        false)
 pf.plant_settings.support.parsley.itemname = minetest.settings:get("support_rosemary_itemname") or "farming:parsley"
+-- Lemon
+pf.plant_settings.support.lemon = {}
+pf.plant_settings.support.lemon.can_swap = minetest.settings:get_bool("support_lemon", false)
+-- Orange
+pf.plant_settings.support.orange = {}
+pf.plant_settings.support.orange.can_swap = minetest.settings:get_bool("support_orange", false)
+-- Apple
+pf.plant_settings.support.apple = {}
+pf.plant_settings.support.apple.can_swap = minetest.settings:get_bool("support_apple", true)
