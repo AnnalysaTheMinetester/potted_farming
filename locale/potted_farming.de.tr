@@ -13,6 +13,8 @@ Basil=Basilikum
 Rosemary=Rosmarin
 Sage=Salbei
 Parsley=Petersilie
+Mint=Minze
+Oregano=Orig
  Stem=nstiel
 Wild =Wilde(r)
 
@@ -29,6 +31,7 @@ Apple=Apfel
 
 Pot with Soil=Vase mit Erde
 Pot with Shrub=Vase mit Strauch
+Pot with Plantain=Vase mit Wegerich
 
 ### tools.lua ###
 

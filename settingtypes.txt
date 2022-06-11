@@ -4,7 +4,7 @@ basil_scale (Spreadvalue of wild variant) float 0.0003
 basil_min_hight (Min. Hight can be found on) int 0
 basil_max_hight (Max. Hight can be found on) int 250
 basil_min_light (Min. Light can grow) int 11
-basil_max_light (Max. Light can grow) int 15
+basil_max_light (Max. Light can grow) int 14
 
 # Rosemary
 rosemary (Enable Rosemary) bool true
@@ -12,7 +12,7 @@ rosemary_scale (Spreadvalue of wild variant) float 0.0005
 rosemary_min_hight (Min. Hight can be found on) int 10
 rosemary_max_hight (Max. Hight can be found on) int 300
 rosemary_min_light (Min. Light can grow) int 11
-rosemary_max_light (Max. Light can grow) int 15
+rosemary_max_light (Max. Light can grow) int 14
 
 # Sage
 sage (Enable Sage) bool true
@@ -20,15 +20,31 @@ sage_scale (Spreadvalue of wild variant) float 0.0004
 sage_min_hight (Min. Hight can be found on) int 30
 sage_max_hight (Max. Hight can be found on) int 400
 sage_min_light (Min. Light can grow) int 12
-sage_max_light (Max. Light can grow) int 15
+sage_max_light (Max. Light can grow) int 14
 
 # Parsley
 parsley (Enable Parsley) bool true
 parsley_scale (Spreadvalue of wild variant) float 0.0003
 parsley_min_hight (Min. Hight can be found on) int 0
 parsley_max_hight (Max. Hight can be found on) int 300
-parsley_min_light (Min. Light can grow) int 12
-parsley_max_light (Max. Light can grow) int 15
+parsley_min_light (Min. Light can grow) int 11
+parsley_max_light (Max. Light can grow) int 14
+
+# Mint
+mint (Enable Mint) bool true
+mint_scale (Spreadvalue of wild variant) float 0.0007
+mint_min_hight (Min. Hight can be found on) int 0
+mint_max_hight (Max. Hight can be found on) int 250
+mint_min_light (Min. Light can grow) int 12
+mint_max_light (Max. Light can grow) int 14
+
+# Oregano
+oregano (Enable Oregano) bool true
+oregano_scale (Spreadvalue of wild variant) float 0.0004
+oregano_min_hight (Min. Hight can be found on) int 0
+oregano_max_hight (Max. Hight can be found on) int 300
+oregano_min_light (Min. Light can grow) int 12
+oregano_max_light (Max. Light can grow) int 14
 
 # Brown Mushroom
 brown (Enable Brown Mushroom) bool true
@@ -47,18 +63,39 @@ boletus_max_light (Max. Light can grow) int 5
 
 # Lemon Fruit Tree
 lemon (Enable Lemon Fruit Tree) bool true
-lemon_min_light (Min. Light can grow) int 12
-lemon_max_light (Max. Light can grow) int 15
+lemon_min_light (Min. Light can grow) int 13
+lemon_max_light (Max. Light can grow) int 14
 
 # Orange Fruit Tree
 orange (Enable Orange Fruit Tree) bool true
-orange_min_light (Min. Light can grow) int 12
-orange_max_light (Max. Light can grow) int 15
+orange_min_light (Min. Light can grow) int 13
+orange_max_light (Max. Light can grow) int 14
 
 # Apple Fruit Tree
 apple (Enable Apple Fruit Tree) bool true
 apple_min_light (Min. Light can grow) int 12
-apple_max_light (Max. Light can grow) int 15
+apple_max_light (Max. Light can grow) int 14
+
+# Cherry Fruit Tree
+cherry (Enable Cherry Fruit Tree) bool true
+cherry_min_light (Min. Light can grow) int 12
+cherry_max_light (Max. Light can grow) int 14
+
+# Plum Fruit Tree
+plum (Enable Plum Fruit Tree) bool true
+plum_min_light (Min. Light can grow) int 12
+plum_max_light (Max. Light can grow) int 14
+
+# Pomegranate Fruit Tree
+pomegranate (Enable Pomegranate Fruit Tree) bool true
+pomegranate_min_light (Min. Light can grow) int 12
+pomegranate_max_light (Max. Light can grow) int 14
+
+# Banana Fruit Tree
+banana (Enable Banana Fruit Tree) bool true
+banana_min_light (Min. Light can grow) int 13
+banana_max_light (Max. Light can grow) int 14
+
 
 # Replace with existing herb
 
@@ -71,6 +108,10 @@ support_parsley (Enable Parsley to be swapped with existing item) bool false
 support_parsley_itemname (Itemname that will replace upon harvesting) string "farming:parsley"
 # possible parsley items (that i know of): farming:parsley , cucina_vegana:parsley
 
+# Mint
+support_mint (Enable Mint to be swapped with existing item) bool false
+support_mint_itemname (Itemname that will replace upon harvesting) string "farming:mint_leaf"
+
 # Lemon
 support_lemon (Enable Lemon to be from CoolTrees mod instead of Ethereal mod) bool false
 
@@ -79,3 +120,6 @@ support_orange (Enable Orange to be from CoolTrees mod instead of Ethereal mod, 
 
 # Apple
 support_apple (Enable Apple Fruit Tree sapling and leaf texture to be taken from Moretrees mod) bool true
+
+# Cherry
+support_cherry (Enable Cherry Fruit Tree leaf texture to be the blossom variant) bool true

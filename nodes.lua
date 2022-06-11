@@ -66,8 +66,7 @@ minetest.register_node(pf.modname .. ":pot_with_soil", {
 
 }) -- minetest.register_node(pot
 
-
-minetest.register_node(pf.modname ..":pot_with_shrub", {
+local pot_with_shrub = {
 	description = S("Pot with Shrub"),
 	groups = {flammable = 2, crumbly = 1, cracky = 1, attached_node = 1, not_in_creative_inventory = 1},
 	tiles = {
@@ -143,7 +142,7 @@ minetest.register_node(pf.modname ..":pot_with_shrub", {
 
 					local n = math.random(3, 4)
 					minetest.sound_play("water-splash-0".. n, {pos=nodepos, gain=1.2})
-					minetest.swap_node(possible_leaf_pos, {name = pf.modname .. ":".. fruit_name .."_leaves_1"})
+					minetest.swap_node(possible_leaf_pos, {name = pf.modname .. ":".. fruit_name .."_leaves_1", param2 = 2})
 
 				end -- if node above is ANY thirsty leaves
 
@@ -159,4 +158,22 @@ minetest.register_node(pf.modname ..":pot_with_shrub", {
 		return false
 	end,
 
-}) -- minetest.register_node(pot_with_shrub
+} -- pot_with_shrub table
+
+minetest.register_node(pf.modname ..":pot_with_shrub",  table.copy(pot_with_shrub) )
+
+-- different shrub for a different plant, that differes only in texture
+-- unfortunately i have to make another node just for this difference
+
+pot_with_shrub.description = S("Pot with Plantain")
+pot_with_shrub.tiles = {
+		"pot_with_soil_top.png",
+		"pot_with_soil_bottom.png",
+		"pot_with_soil_side.png^" .. pf.modname .. "_plantain.png",
+		"pot_with_soil_side.png^" .. pf.modname .. "_plantain.png",
+		"pot_with_soil_side.png^" .. pf.modname .. "_plantain.png",
+		"pot_with_soil_side.png^" .. pf.modname .. "_plantain.png"
+
+} -- plantain tiles
+
+minetest.register_node(pf.modname ..":pot_with_plantain",  table.copy(pot_with_shrub) )

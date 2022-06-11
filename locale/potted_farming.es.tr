@@ -7,12 +7,14 @@ Empty Watering Can=Regadera Vacia
 
 ### lib.lua ###
 
-Pot with =Florero con 
+Pot with =Florero con
 
 Basil=Albahaca
 Rosemary=Romero
 Sage=Sabio
 Parsley=Perejil
+Mint=Menta
+Oregano=Origan
  Stem= con Raíz
 Wild =Salvaje
 
@@ -29,6 +31,7 @@ Apple=Manzana
 
 Pot with Soil=Florero con Tierra
 Pot with Shrub=Florero con Arbusto
+Pot with Plantain=Florero con Platano
 
 ### tools.lua ###
 

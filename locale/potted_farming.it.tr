@@ -1,4 +1,5 @@
 # textdomain: potted_farming
+# textdomain: potted_farming
 
 
 ### items.lua ###
@@ -13,6 +14,8 @@ Basil=Basilico
 Rosemary=Rosmarino
 Sage=Salvia
 Parsley=Prezzemolo
+Mint=Menta
+Oregano=Origano
  Stem= con Radice
 Wild =Selvatico
 
@@ -29,6 +32,7 @@ Apple=Mela
 
 Pot with Soil=Vaso con Terra
 Pot with Shrub=Vaso con Arbusto
+Pot with Plantain=Vaso con Piantaggine
 
 ### tools.lua ###
 

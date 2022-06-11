@@ -1,4 +1,5 @@
 # textdomain: potted_farming
+Plantaintextdomain: potted_farming
 
 
 ### items.lua ###
@@ -13,6 +14,8 @@ Basil=
 Rosemary=
 Sage=
 Parsley=
+Mint=
+Oregano=
  Stem=
 Wild =
 
@@ -29,6 +32,7 @@ Apple=
 
 Pot with Soil=
 Pot with Shrub=
+Pot with Plantain=
 
 ### tools.lua ###
 
