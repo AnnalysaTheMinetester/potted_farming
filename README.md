@@ -1,7 +1,11 @@
+Hello there! Thank you for checking out my mod!
+
 # Potted Farming
 
-A new farming method for MineTest, not on soil, but on nice pots, even inside your house or castle!
+This is a new farming mechanic for MineTest, not on soil, but on nice pots, even inside your house or castle!
 I inteded this mod also to provide some nice plants to decorate your rooms.
+Have you ever wanted to grow plants in your nice house, and maybe get some nice fruit in the meantime?
+Well now you can! Make sure you give it enough light and water to sustain the little tree, and get your fresh apples now!
 
 ## Things that you will need
 
@@ -17,34 +21,56 @@ It can hold very little water, afterall the plants do not require much, therefor
 
 ## Plants and Herbs
 
-You can find these new plants in your world, and obtain a *stem* from them.
+You can find some new plants in your world, wild herbs in different biomes, break them to obtain a *stem* from them.
 Planting it in a pot starts your journey as a pot farmer!
 If there is enough light, it will grow and after a while you can harvest some leaves, without removing the whole plant!
 If you don't harvest it, it will become thristy and you'll have to use the watering can. You will not loose the plant.
 
-#### Plants present currently:
-Basil, Rosemary, Sage, Parsley
-Rosemary and Parsley can be existing items from [farming] or [cucina_vegana]
+#### Plants currently present:
+
+- Basil
+- Rosemary
+- Sage
+- Parsley
+- Mint
+- Oregano
+
+Rosemary could be preexisting from [cucina_vegana](https://content.minetest.net/packages/Clyde/cucina_vegana/),
+while Parsley and Mint from [farming](https://content.minetest.net/packages/TenPlus1/farming/).
+If you change the settings you can have the potted plant give you that mod item instead of a new one defined by this mod.
 
 ## Mushrooms
 
 Are you tired of building a dark room to grow mushrooms and wait for them ages to grow only to harvest few of them?
-Well ... you will build the same room, mushrooms require darkness, but at least you can harvest more than one
-mushroom and they will regrow from the same pot!
+Well ... you still need the same dark room (mushrooms require darkness after all!) but at least you can harvest more than one
+ and they will regrow from the same pot!
 
-#### Mushrooms present currently:
-Brown Mushroom from [default], Chanterelle and Boletus from [herbs]
+#### Mushrooms currently present:
+
+- Brown Mushroom from [default]
+- Chanterelle from [herbs](https://content.minetest.net/packages/Clyde/herbs/)
+- Boletus also from [herbs]
 
 ## Fruit trees
 
 Yeah you read that right. I present you a way to grow a potted little tree that can regrow fruits!
 Plant a regular sapling and wait, it will eventually grow into a 2 node tall tree.
-The leaves after some time will either grow 2 to 3 fruits that you can harvest, without hurting the tree, again no
-need to replant over and over, or they will be tinted in yellow, meaning the tree is now thristy, in that case
+The leaves after some time will either grow 2 to 3 fruits that you can harvest, without hurting the tree (again no
+need to replant over and over) or they will be tinted in yellow, meaning the tree is now thristy, in that case
 you need to pour water into the pot.
 
-#### Fruit trees present currently:
-Lemon and Orange from [ethereal], Apple from [default]
+#### Fruit trees currently present:
+
+- Apple from [default]
+- Orange from [ethereal](https://content.minetest.net/packages/TenPlus1/ethereal/)
+- Lemon from [ethereal]
+- Banana from [ethereal]
+- Cherry from [cool_trees modpack](https://content.minetest.net/packages/runs/cool_trees/)
+- Plum from [cool_trees]
+- Pomegranate from [cool_trees]
+
+Furthermore, the settings allow some trees to be changed, for example the Apple small tree could use the [moretrees](https://content.minetest.net/packages/mt-mods/moretrees/) texture instead, and the Orange and Lemon small tree could
+instead use the [cool_trees] sapling and textures.
 
 ### License
 
