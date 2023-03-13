@@ -16,7 +16,7 @@ Sage=Sauge
 Parsley=Persil
 Mint=Menthe
 Oregano=Origan
- Stem= avec Tige
+# Stem= avec Tige
 Wild =Sauvage
 
 Brown=Brun
@@ -26,7 +26,7 @@ Boletus=Bolet
 Lemon=Citron
 Orange=Orange
 Apple=Pomme
- (Leaves)= (Feuilles)
+# (Leaves)= (Feuilles)
 
 ### nodes.lua ###
 

@@ -16,7 +16,7 @@ Sage=Salvia
 Parsley=Prezzemolo
 Mint=Menta
 Oregano=Origano
- Stem= con Radice
+Stem=con Radice
 Wild =Selvatico
 
 Brown=Marrone
@@ -26,7 +26,7 @@ Boletus=Boleto
 Lemon=Limone
 Orange=Arancia
 Apple=Mela
- (Leaves)= (Foglie)
+(Leaves)=(Foglie)
 
 ### nodes.lua ###
 
