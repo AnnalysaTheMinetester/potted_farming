@@ -16,7 +16,7 @@ Sage=
 Parsley=
 Mint=
 Oregano=
- Stem=
+Stem=
 Wild =
 
 Brown=
@@ -26,7 +26,7 @@ Boletus=
 Lemon=
 Orange=
 Apple=
- (Leaves)=
+(Leaves)=
 
 ### nodes.lua ###
 

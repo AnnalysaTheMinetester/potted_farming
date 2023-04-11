@@ -15,7 +15,7 @@ Sage=Salbei
 Parsley=Petersilie
 Mint=Minze
 Oregano=Orig
- Stem=nstiel
+Stem=Stiel
 Wild =Wilde(r)
 
 Brown=Braun
@@ -25,7 +25,7 @@ Boletus=Steinpilz
 Lemon=Zitrone
 Orange=Orange
 Apple=Apfel
- (Leaves)= (Blätter)
+(Leaves)=(Blätter)
 
 ### nodes.lua ###
 

@@ -263,7 +263,7 @@ function lib.register_plant(plant_name)
 
     -- STEM DEFINITION --
     minetest.register_craftitem(lib.modname .. ":" .. plant_name .."_stem", {
-        description = S(plant_desc) .. S(" Stem"),
+        description = S(plant_desc) .. " " .. S("Stem"),
         inventory_image = lib.modname .. "_".. plant_name .."_stem.png",
         groups = {stem = 1, flammable = 2,},
         --the planting mechanism is in the pot on_rightclick
@@ -875,7 +875,7 @@ function lib.register_fruit_tree (k, sapling_name, full_fruit_name, original_lea
 											end)
 
 	local leaves_def = {
-		description = S(fruit_desc) .. S(" (Leaves)") .. " 1",
+		description = S(fruit_desc) .. " " .. S("(Leaves)") .. " 1",
 		drawtype = "plantlike", -- allfaces_optional
 		visual_scale = 1.3,
 		walkable = false,
@@ -905,7 +905,7 @@ function lib.register_fruit_tree (k, sapling_name, full_fruit_name, original_lea
 
 	-- STAGE 2 : lemon leaves 2 : gives 2-3 lemons, does not grow more, goes back to leaves 1 when harvested
 
-	leaves_def.description = S(fruit_desc) .. S(" (Leaves)") .. " 2"
+	leaves_def.description = S(fruit_desc) .. " " .. S("(Leaves)") .. " 2"
 	leaves_def.tiles = {lib.modname .."_".. fruit_name .."_on_leaves.png^".. leaves_png }
 	leaves_def.drop = {
 		items = {
@@ -947,7 +947,7 @@ function lib.register_fruit_tree (k, sapling_name, full_fruit_name, original_lea
 
 	-- lemon leaves 3 : needs water, does not grow, goes back to leaves 1 when the POT is watered
 
-	leaves_def.description = S(fruit_desc) .. S(" (Leaves)") .. " 3"
+	leaves_def.description = S(fruit_desc) .. " " .. S("(Leaves)") .. " 3"
 	leaves_def.tiles = { leaves_png .. "^[colorize:yellow:35" }
 	leaves_def.drop = {}
 
