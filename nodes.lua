@@ -79,6 +79,7 @@ local pot_with_shrub = {
 
 	}, -- tiles
 	drawtype = "nodebox",
+	use_texture_alpha = "clip",
 	paramtype = "light",
 	walkable = true,
 	node_box = {

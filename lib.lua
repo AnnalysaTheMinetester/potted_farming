@@ -16,6 +16,7 @@ local pot_def = {
 	}, -- tiles
 	drawtype = "nodebox",
 	paramtype = "light",
+	use_texture_alpha = "clip",
 	node_box = {
 			type = "fixed",
 			fixed = {
